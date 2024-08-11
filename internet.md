@@ -145,3 +145,182 @@ Ejemplos populares de servidores web son Apache, Nginx, Microsoft IIS y LiteSpee
     - Servidor TLD: El servidor recursivo consulta al servidor TLD, que le indica cuál servidor de nombres autoritativo gestiona el dominio específico (por ejemplo, google.com).
     - Servidor autoritativo: El servidor recursivo consulta al servidor autoritativo, que tiene la información exacta de la dirección IP asociada al nombre de dominio solicitado.
 5. Respuesta al navegador: Una vez que el servidor recursivo obtiene la dirección IP, la almacena en su caché para futuras consultas y la envía de vuelta al navegador, que entonces puede conectarse al servidor web correspondiente utilizando esa dirección IP.
+
+## Todo sobre los navegadores web.
+### Su principal funcionalidad
+Es presentrr el recurso web que elijas solicitandolo al servicio y mostrandolo enla ventana del navegador(documentos HTML, PDF, imagenes, etc.) El usuario especifica la ubicacion del recurso mediante un URI (identificador uniforme de recursos)
+
+La manera en la que el navegador interpreta y muestra los archivos HTML se especifica en las especificaciones HTML y CSS. La organizacion W3C (World wide web consortium), que es la organizacion de estandares para la WEB. Durante años, los navegadores se adaptaron a solo una parte de las especificaciones y desarrollaron sus propias extensiones. esto provoco graves problemas de compatibilidad para los autores web. Actualmente la W3C logro una mayor estandarizacion.
+
+No existe ninguna obligatoriedad de elementos en la interfaz de usuario de los navegadores pero si suelen colocarse ciertos elementos. ejemplo: Barra de direcciones para insertar el URI.
+
+### Motores de renderizacion:
+Un motor de renderización web es el componente de un navegador web que se encarga de interpretar el código HTML, CSS y JavaScript de una página web para convertirlo en la interfaz gráfica que ves en pantalla. Este proceso incluye el análisis del código, la construcción del DOM (Document Object Model), el cálculo de los estilos visuales, el renderizado de las capas y el dibujo final en la pantalla.
+
+Para poder renderizar tipos de archivos que no son HTML, CSS, o JavaScript, como documentos PDF, contenido multimedia (audio, video), y otros formatos especializados se utilizan los "complementos". Estos complementos actúan como extensiones al motor de renderización principal, integrándose en el proceso de renderizado para ofrecer una experiencia de usuario más completa.
+
+#### ¿Cómo funciona un motor de renderización web?
+1. **Parsers y tokenizadores:** El motor comienza leyendo el código HTML y CSS, y lo convierte en un árbol de nodos conocido como DOM.
+2. **Construcción del DOM:** El DOM es una representación jerárquica de todos los elementos de la página. A medida que el motor parsea el HTML, crea nodos para cada etiqueta, y a estos nodos se les aplica el estilo adecuado (CSS).
+3. **Aplicación de estilos (CSSOM):** Se crea una estructura similar al DOM, llamada CSSOM (CSS Object Model), donde se almacenan las reglas de estilo. Este CSSOM se combina con el DOM para determinar cómo se verá cada elemento.
+4. **Layout:** En esta etapa, el motor calcula la posición exacta y el tamaño de cada elemento en función del DOM y CSSOM.
+5. **Renderización:** Aquí es donde el motor dibuja los elementos en la pantalla utilizando técnicas como el rasterizado, que convierte las instrucciones en píxeles que se mostrarán en la pantalla.
+6. **JavaScript y el motor de JavaScript:** Si la página contiene JavaScript, el motor de JavaScript (como V8 en Chrome) ejecuta el código y puede modificar el DOM o CSSOM, provocando una nueva fase de renderizado.
+
+Los motores de renderizacion mas comunes son Blink el cual se utiliza por Chrome, edge, brave, etc. el cual es un fork del motor WebKit, desarrollador principalmente por google. Blink es muy rapido y soporta las ultimas tecnologias web. Todos estos navegadores al utilizar chromium utilizan Blink. Gecko es el otro motor de renderizado el cual es utilizado por Mozilla firefox y desarrollado por Mozilla, se conoce por su flexibilidad y soporte a estandares web avanzados, ademas, al intrudicir el proyecto Quantum mejoro considerablemente la velocidad y eficiencia del motor.
+
+#### El flujo principal del motor de renderizado.
+Por lo general, esto se hace en fragmentos de 8KB. El motor de renderizado **comenzara a analizar el documento HTML y convertira los elementos en nodos DOM** en un arbol denominado "arbol de contenido". El motor analizara los datos de estilo, tanto los archivos CSS externos como en elementos en estilo. La informacion de estilo junto con las intrucciones visuales en el codigo HTML se usara para crear otro arbol: **el arbol de renderizacion**.
+El arbol de renderizacion contiene rectangulos con los atributos visuales como el color y las dimensiones, los rectangulos estan en el orden correcto para que se muestren en la pantalla.
+
+Despues de la construccion del arbol de renderizacion, **se pasa por un proceso de diseño o administracion de recursos**. Esto significa que debes indicar a cada nodo las coordenadas exactas del lugar en el que debe aparecer en la pantalla. **La siguiente etapa es Painting**: SE recorrera el arbol de renderizacion y se pintara cada nodo con la capa de backend de la IU.
+
+Para mejorar la experiencia del usuario, se renderiza el contenido lo antes posible y no se espera hasta que se analice todo el HTML para comenzar a compilar y diseñar el arbol de representacion.
+
+#### Analisis general
+Cuando visitas una pagina web, el navegador recibe un monton de informacion, como texto, imagenes, y enlaces. Siguiendo un conjunto de reglas muy especificas el navegador se encarga de organizar estas piezas para que tu veas la pagina correctamente y todo funciones.
+El navegador divide la pagina en partes asi como se hace en una formula matematica y las organiza en un arbol para entender que hacer primero al igual que como hariamos al intentar resolver una formula como por ejemplo: 3+2-1 = primero sumamos, luego restamos. esta organizacion es la que se da en el arbol.
+
+#### Gramatica sin contexto ¿que es?
+Son las reglas del juego que no necesitan mirar el contexto de cada pieza para decidir que hacer. Estas reglas  describen como las cadenas (secuencias de simbolos) de un lenguaje se generan y como se deben estructurar.
+Caracteristicas claves:
+1. Producciones: Las reglas de produccion tienen la forma 'A -> a', donde 'A' es un simbolo no terminal (una categoria gramatical como una etiqueta HTML) y 'a' es una secuencia de simbolos que puede incluir tanto simbolos terminales (elemenos del lenguaje, como texto o numeros) como no terminales.
+2. Independencia del contexto: lo crucial es que el simbolo no terminal 'A' puede ser reemplazado por 'a' sin considerar el contrexto en el que 'A' aparece. Es decir, la regla se aplica siempre de la misma manera, independientemente de lo que haya antes o despues.
+3. Determinismo: las reglas se pueden aplicar de manera consistente para analizar o generar las estructuras del lenguaje.
+
+- Símbolos No Terminales: Son las categorías gramaticales que se pueden descomponer o expandir en otros símbolos, y no aparecen directamente en el código final que se procesa. En el contexto de HTML:
+    - Ejemplos de símbolos no terminales pueden ser cosas como Documento, Cuerpo, Contenido, etc. Estos representan partes abstractas de la estructura de un documento HTML.
+- Símbolos Terminales: Son los elementos más básicos del lenguaje que no se descomponen más. En HTML, los símbolos terminales son los elementos que realmente ves en el código:
+    - Etiquetas HTML como <html>, <body>, <p>, y <div> son ejemplos de símbolos terminales.
+    - Texto plano dentro de las etiquetas, como el contenido "Hello, World!" en <p>Hello, World!</p>, también es un símbolo terminal.
+
+#### Combinacion de Lexer y analizador
+Consta de dos subprocesos: analisis lexico y analisis sintactico.
+- Analisis lexico: Proceso de divir la entrada en tokens. los token son el vocabulario del lenguaje: la coleccion de componentes basicos validos.
+- analisis sintactico: aplicacion de las reglas de sintaxis del lenguaje.
+
+Estos analizadores suelen dividir el trabajo entre dos compoenentes: el **lexer** (tokenizador) que es responsable de dividr la entrada en tokens validos y el analizador que construye el arbol de analisis analizando la estructura del documento de acuerdo con las reglas de sintaxis del lenguaje. quitando caracteres irrelevantes, como espacios en blanco y saltos de linea.
+
+El proceso de analisis es iterativo. el analizador pedira al lexer un token nuevo y tratara de hacer coincidir el token con una de las reglas de sintaxis. si una regla coincide, se agrega un nodo correspondiente al token al arbol de analisis y el analizador solicitara otro token.
+Pero si no coincide ninguna regla, el analizador almacena el token internamente y seguira solicitando tokens hasta que se encuentre una regla que coincida con todos los tokens almacenados internamente si no se encuentra ninguna regla el analizador presentara una excepcion. Lo cuan significa que el documento no es valdido y contiene errores de sintaxis.
+
+#### Tipos de analizadores
+1. **Top Down**: Examinan la estructura de alto nivel de la sintaxis y buscan una coincidencia de reglas. 
+    Ej: veamos la formula: "2 + 3 - 1" ... Primero identifica 2 + 3 como una expresion y luego identifica a 2 + 3 - 1 como una expresion. este proceso de identificacion de la expresion evoluciona y coincide con las otras reglas.
+    **Lenguajes donde se utiliza: Pascal, Lisp, Python, JavaScript, C.**
+2. **Bottom Up:** los analizadores ascendentes comienzan con la entrada y la transforman gradualmente en reglas de sintaxis, comenzando desde las reglas de bajo nivel hasta que se cumplen las reglas de alto nivel.
+    El proceso es el siguiente:
+    1. Lee los tokens.
+    2. Combina estos tokens para formar subexpresiones
+    **Lenguajes donde se utiliza: C++, Java, Ruby, Perl, GO**
+
+Crear un analizador es para tu lenguaje es una tarea muy complicada por lo que existen generadores de analizadores.
+Webkit usa dos generadores de analizadores conocidos **Flex** para crear un analizador y **Bison** para crear un analizador (tambien llamados Lex y Yacc) Flex es un archivo que contiene definiciones de expresiones regulares de los tokens y bison son las reglas de sintaxis del lenguaje en formato BNF.
+
+**¿que es el formato BNF?**
+BNF (Backus-Naur Form) es un lenguaje formal utilizado para describir la sintaxis de lenguajes de programación y otros lenguajes formales. BNF es una notación que permite definir reglas gramaticales de forma clara y estructurada, lo que es especialmente útil para diseñar y especificar compiladores e intérpretes.
+``` plaintext
+<expresión> ::= <término> | <expresión> + <término> | <expresión> - <término>
+<término> ::= <factor> | <término> * <factor> | <término> / <factor>
+<factor> ::= <número> | ( <expresión> )
+<número> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+```
+BNF es ampliamente utilizado para especificar la gramática de lenguajes de programación como C, Java, Python, etc. Los documentos de referencia del lenguaje a menudo incluyen una descripción de la gramática en BNF.
+
+#### Analizador HTML
+El trabajo del analizador de HTML es analizar el lenguaje en un arbol de analisis
+
+##### Gramatica HTML
+El vocabulario y la sintaxis de HTML se define en especificaciones creadas por la W3C.
+Lamentablemente, todos los temas de los analizadores convencionales no se aplican al codigo HTML. HTML no se puede definir facilmente mediante una gramatica libre de contexto que los analizadores necesitan.
+
+El formato oficial para definir HTML es **DTD** (DEFINICION DEL TIPO DE DOCUMENTO). Pero no es una gramatica sin contexto.
+
+HTML es muy parecido a XML y existen muchos analizadores de XML. De hecho existe una variacion XML de HTML y XHTML. pero la diferencia entre estos dos es el enfoque. siendo HTML mas tolerante a omitir ciertas etiquetas que luego se agregan implicitamente u omitir etiquetas de inicio o finalizacion y asi sucesivamente. Siendo mucho mas suave en lugar de rigido y exigente como XML.
+Esta pequeña diferencia hace que HTML sea mas popular pero dificulta la gramatica formal por lo que los analizadores convencionales no pueden analizar facilmente HTML.
+
+En resumen estos son los motivos por los que no se puede analizar con los analizadores normales:
+1. La naturaleza tolerante del lenguaje.
+2. El hecho de que los navegadores tengan la tolerancia a errores tradicional para admitir casos conocidos de HTML no valido.
+3. El proceso de analises es reentrante, en HTML el codigo es dinamico y con llamadas (principalmente con JS) se pueden agregar tokens.
+
+##### DTD de HTML
+DTD es el formato que se usa para definir lenguajes de la familia SGMI. el formato contiene definiciones para todos los elementos permitidos, sus atributos y jerarquias. La DTD no crea gramatica libre de contexto.
+*No encontre el DTD de HTML 5 dejo el de HTML4 aca:* 
+[DTD de HTML4](https://www.w3.org/TR/html4/strict.dtd)
+    SGML es un meta-lenguaje, lo que significa que no es un lenguaje de marcado en si mismo, sino un conjunto de reglas para definir lenguajes de marcado. Algunos lenguajes derivados de SGML: HTML, XML, XHTML, DocBook, MathML
+
+##### DOM
+Es un arbol de nodos de elementos y atributos del DOM. DOM (Document Object Model). Es la presentacion de objetos del documento HTML y la interfaz de los elementos HTML al mundo exterior como JavaScript.
+La raiz del arbol se denomina Document y luego tiene una relacion uno a uno con el lenguaje de marcado.
+
+##### El algoritmo de asignacion de token
+El algoritmo es demasiado complejo para describirlo por completo, pero veamos un ejemplo simple para entenderlo. antes dejo aca un link al algoritmo completo:
+[Algoritmo de asignacion de token completo](https://html.spec.whatwg.org/multipage/parsing.html)
+1. Al encontrar el caracter "<" el estado cambia a Tag open state.
+2. luego al encontrar un caracter "a-z" el estado queda en Tag name state y se queda en este estado hasta encontrar un ">"
+3. ahora que se alcanzo esa etiqueda se emite el token actual y el estado cambia a "Estado de los datos"
+4. Empieza a consumir los caracteres del contenido de la etiqueta uno a uno y se emiten los token de caracter.
+5.  esto continua hasta alcanzar el `</body>`
+
+##### Algoritmo de construccion de arboles
+Simultaneamente a la creacion del analizador se crea el objeto Document y durante la construccion del arbol se modificara el DOM, agregandole los elementos.
+1. Modo Inicial: Se recibe el HTML.
+2. Before html: en esta etapa, se vuelve a procesar el HTML, lo que provoca la creación del elemento HTMLHtmlElement, que se añadirá al objeto document raíz.
+3. Before head: Se recibe el token y se crea el HTMLHeadElement de manera implícita, incluso si no tenemos un encabezado definido.
+4. IN THE HEAD and Before the head: Se procesan todos los elementos dentro de la sección `<head>` y se inserta el HTMLBodyElement. El modo se transfiere a In Body.
+5. In body: Se procesan las etiquetas y los tokens de caracteres, creando e insertando los nodos de texto. Los demás caracteres se añaden a estos nodos.
+6. After body: Se activa al recibir la etiqueta de cierre del `<body>`
+7. After after body: Cuando se recibe la etiqueta de cierre del `<html>`, se entra en este estado y se finaliza el análisis.
+8. El navegador marca el documento como interactivo y comenzara a analizar las secuencias de comandos en diferido.
+
+##### Tolerancia a errores:
+Nunca se obtendra una sintaxis no valida en una pagina HTML. Los navegadores corrigen el contenido no valido y continuan.
+El manejo de errores es bastante consistente en los navegadores, pero sorprendentemente no ha formado parte de las especificaciones HTML. Como los marcadores y los botones atrás/adelante, es algo que se desarrolló en los navegadores a lo largo de los años. Se conocen construcciones HTML no válidas que se repiten en muchos sitios y los navegadores intentan corregirlas de manera que se ajusten a los otros navegadores.
+
+los principales puntos para resolver estos errores de sintaxis:
+1. El elemento que se agrega está explícitamente prohibido dentro de alguna etiqueta externa. En este caso, debemos cerrar todas las etiquetas hasta la que prohíbe el elemento y, luego, agregarlas.
+2. No podemos agregar el elemento directamente. Esto puede deberse a que la persona que escribió el documento olvidó alguna etiqueta intermedia (o que la etiqueta intermedia es opcional). Esto podría suceder con las siguientes etiquetas: HTML HEAD BODY TBODY TR TD LI (¿olvidé alguna?).
+3. Queremos agregar un elemento de bloque dentro de un elemento intercalado. Cierra todos los elementos intercalados hasta el siguiente elemento de bloque más alto.
+4. Si esto no ayuda, cierra los elementos hasta que podamos agregarlos o ignora la etiqueta.
+
+**Ejemplos mas comunes:**
+1. `</br>` en lugar de `<br>`
+``` Javascript
+if (t->isCloseTag(brTag) && m_document->inCompatMode()) {
+     reportError(MalformedBRError);
+     t->beginTag = true;
+}
+```
+2. Una tabla desviada
+    - Sin corregir
+    ``` HTML
+    <table>
+    <table>
+        <tr><td>inner table</td></tr>
+    </table>
+    <tr><td>outer table</td></tr>
+    </table>
+    ```
+    - Luego de ser corregido por webkit
+    ``` HTML
+    <table>
+    <tr><td>outer table</td></tr>
+    </table>
+    <table>
+    <tr><td>inner table</td></tr>
+    </table>
+    ```
+    - Codigo interno que resuelve el error
+    ``` Javascript
+    if (m_inStrayTableContent && localName == tableTag)
+        popBlock(tableTag);
+    ```
+
+#### Analisis de CSS
+A diferencia de HTML, CSS es una gramatica sin contexto y se puede analizar
+A la hora de renderizarse. Conceptualmente, parece que, como las hojas de estilo no cambian el árbol del DOM, no hay razón para esperarlas y detener el análisis del documento. Sin embargo, existe un problema con las secuencias de comandos que solicitan información de estilo durante la etapa de análisis del documento. Si el estilo aún no se carga ni analiza, la secuencia de comandos obtendrá respuestas incorrectas y, al parecer, esto causó muchos problemas. Parece ser un caso límite, pero es bastante común. Firefox bloquea todas las secuencias de comandos cuando hay una hoja de estilo que todavía se está cargando y analizando. WebKit bloquea las secuencias de comandos únicamente cuando intentan acceder a determinadas propiedades de estilo que pueden verse afectadas por las hojas de estilo descargadas.
+
+#### Relación del árbol de representación (Estilos) con el árbol del DOM
+Los representadores corresponden a elementos del DOM pero la relacion no es uno a uno (head no tiene representacion, algunos elementos con visibilidad hidden aparecen en el arbol, otros elementros no tienen representacion y un representacion puede pertenecer a muchos elementos del DOM).
