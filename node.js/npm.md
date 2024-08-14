@@ -143,5 +143,4 @@ es una caracteristica de NPM que permite organizar múltiples paquetes dentro de
     "components/*"
   ]
 }
-
 ```
