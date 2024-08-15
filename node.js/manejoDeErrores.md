@@ -8,7 +8,7 @@ Obviamente es complicado hacer un buen sistema de manejo de errores. pero lograr
     - Failed to connect to server | Fallo al conectar al servidor.
     - Failed to resolve hostname |Fallo al resolver el nombre del servidor.
     - Invalid user input | Entrada de usuario invalida | Error de auth.
-    - Request timeout | Tiempo de espera de la solictud excedido.
+    - Request timeout | Tiempo de espera de la solictud excedido.t
     - Server returned a 500 response.
     - Socket hang-up | Cierre inesperado de la conexion.
     - System is out of memory | El sistema se quedo sin memoria.
@@ -30,7 +30,38 @@ console.log(error.stack)
 
 error.stack es un campo optimo para debuguear el error... el campo .message tambien puede ser muy util.
 
-## Mejores practicas de uso.
+## La propiedad stack del objeto Error.
+Esta propiedad proporciona un rastro de la pila (stack trace), es decir, una lista de las funciones que se llamaron una a una hasta llegar al punto donde se produjo el error. ESta informacion es invaluable para depurar y encontrar la raiz de un problema en tu codigo.
+- Localiza el error: te indica en que parte exacta de tu codigo se origino el error.
+- Comprender la secuencia de llamadas: Te muestra la secuencia de funciones que se ejecutaron antes de que ocurriera el error, lo que te ayuda a entender el contexto en el que se produjo.
+- Depurar de manejra afectiva: AL tener esta informacion, puedes seguir el rastro hacia atras y encontrar la causa raiz del problema.
+Ejemplo:
+``` Javascript
+try {
+  // Código que puede generar un error
+  let result = a / b;
+} catch (error) {
+  console.error(error.stack);
+}
+```
+En la consola deberia verse algo como esto:
+``` Bash
+TypeError: Division by zero
+    at <anonymous>:1:11
+    at Object.<anonymous> (/path/to/your/file.js:5:17)
+    at Module._compile (node:internal/modules/cjs/loader.js:1101:30)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader.js:1153:10)
+    at Module.load (node:internal/modules/cjs/loader.js:981:32)
+    at Function.Module._load (node:internal/modules/cjs/loader.js:875:14)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main.js:76:12)
+    at node:internal/main/run_main_module.js:17:11
+```
+
+La primera linea indica el tipo de error y un mensaje descriptivo. en las siguientes lineas se ve la pila de llamadas, empezando por la linea donde se produjo el error y ascendiendo hasta las funciones que la llamaron.
+
+**Es ideal para el registro de logs y depurar en la consola**
+
+## Mejores practicas de usstacko.
 1. Usar errores personalizados para manejar errores operacionales.
     Con el patron async/await podes escribi codigo que parece sincrono pero no deja de ser asincrono.
     Este patron te ayudara a limpiar el codigo y reducir el callback hell.
@@ -332,3 +363,258 @@ Javascript utiliza un sistema de manejo de errores para alertar a los desarrolla
   ```
 7. InternalError: Indica un error interno en el motor de JS. Generalmente es causado por un error en el codigo del mismo motor y no por el codigo del usuario.
   Errores en el compilador o interprete de JS, problemas de memoria o bugs en el motor.
+
+# APM
+Son las siglas de Applicaction Performance Monitoring. Es un herramienta o conjunto de herramientas que te permiten observar, analizar y optimizar el rendimiento de tus aplicaciones Node.js.
+
+## ¿Porque es importante?
+Node.js con su arquitectura basada en eventos y no bloqueante, es ideal para aplicaciones de alta concurrencia. Sin embargo, a medida que una aplicacion crece, puede volverse compleja y dificil de depurar. Un APM te ayuda a:
+- Identificar cuellos de botella: encontrando las partes de tu codigo que estan ralentizando la aplicacion.
+- Detectando errores: Descubre errores y excepciones que podrian estar afectando a la experiencia del usuario.
+- Realizar un seguimiento de las solicitudes: Observa como se procesan las solicitudes HTTP, desde la entrada hasta la salida.
+- Visualizar dependencias: Comprende como interacturan diferentes componentes de tu aplicacion.
+- Mejorar la experiencia del usuario: Optimiza el tiempo de respuesta y la estabilidad de tu aplicacion.
+
+## ¿como funciona un APM en Node.js?
+Generalmente funciona utilizando un agente dentro de tu app. Este agente captura datos sobre el rendimiento de la app, como:
+- Metricas: Tiempo de respuesta, uso de CPU y Memoria, numero de solicitudes por segundo.
+- Trazas: Un registro detallado de como se ejecuta una solicitud a traves de tu aplicacion.
+- Logs: Mensajes de registro que proporcionan informacion sobre el estado de la aplicacion.
+
+Estos datos son enviados a una plataforma de analisis donde pueden ser visualizados y analizados.
+
+## Ejemplos de herramientas APM para node.js
+- Elastic APM: Parte del stack Elastic, ofrece una solucion completa para el monitoreo de aplicaciones, incluyendo visualizacionm alertas y analisis.
+- New relic: Una plataforma de monitoreo de aplicaciones en la nube que proporciona una amplia gama de metricas y herramientas de analisis.
+- AppDynamics: UNa solucion empresarial para el monitoreo de aplicaciones que se integra con muchas tecnologias.
+- Datadog: Una plataforma de monitoreo y seguridad que ofrece una amplia visibilidad de las aplicaciones y la infraestructura.
+
+## ¿y si lo implementamos de forma nativa?
+Podemos implementar nuestro propio APM en node.js y express utilizando middlewares personalizados para interceptar las solicitudes y respuestas, medir esos tiempos y registrar la informacion relevante, ademas deberiamos subscribirnos a los eventos de 'beforeExit, 'exit', 'uncaughtException', etc., para capturar la informacion sobre el estado de la app. Eso en conjunto con librerias como perf_hooks que se utiliza para medir el rendimiento en secciones especificas del codigo podria ser guardado en bases de datos NoSQL como MongoDB y luego generar una interfaz para visualizar todo.
+
+Pero como todo en la vida tiene sus ventajas y desventajas esta implementacion nativa:
+### Ventajas:
+- Control total: decides que datos recolectar y como analizarlos.
+- Personalizacion: Adaptamos la solucion a las necesidades de nuestra app.
+- Costo: A largo plazo es mas economico si te manejas con un equipo de desarrollo interno.
+### Desventajas:
+- Tiempo de desarrollo: Requiere un esfuerzo significativo para construir y mantener la infraestructura.
+- Complejidad: Manejar la recoleccion, almacenamiento y visualizacion de datos puede ser complejo.
+- Mantenimiento: Actualizar y mantener la solucion a largo plazo puede ser costoso.
+- Funcionalidades limitadas: Puede faltar algunas caracteristicas avanzadas que ofrecen las herramientas comerciales.
+
+**¿Es recomendable entonces la implementacion nativa?**
+Esta decicion depende de varios factores:
+- Tamaño y complejidad de la aplicacion: para apps pequeñas o con requisitos simples, la implementacion nativa puede ser suficiente.
+- Equipo de desarrollo: si tienes un equipo con experiencia en desarrollo de backend y DevOps, la implementacion nativa puede ser una buena opcion
+- Presupuesto: Considera el costo de mantenimiento a largo plazo.
+- Funcionalidades requeridas: Si necesitas caracteristicas avanzadas como correlacion de errores, analisis de causa raiz o integracion con otras herramientas, una solucion comercial puede ser mas adecuada.
+
+Para la mayoria de los proyectos, se recomienda utilizar una herramienta comercial de APM ya que ofrecen una solucion completa y facil de usar, pueden ahorrarte mucho tiempo y esfuerzo.
+Si decides implementar APM de forma nativa lo mejor es comenzar con un enfoque incremental y comenzar a monitorear las metricas mas importates y luego agregar gradualmente mas funcionalidades a medida que sea necesario.
+
+# consejos adicionales y Mejores practicas cuando se rompe el codigo
+Añadir endpoint para checkear la salud de la aplicaion.
+``` Javascript
+// Codigo nodeJS utilizando Express
+app.get('/heath',(req,res)=>{
+  res.status(200).send('OK')
+})
+```
+## Objeto Process
+estar subscrito a los eventos de process para poder salir antes de que se rompa y reiniciarlo es una excelente practica.
+
+### Exist Events:
+- beforeExi: maneja de forma asincrona las llamadas y el bucles mientras continua trabajando hasta terminar.
+- exit: No puede manejar las llamadas asincronas, solo sincronas, los bucles no corren aca.
+
+Ejemplos de uso:
+```Javascript
+process.on('beforeExit',code => {
+  // puede hacer llamadas asincronas y  bucles.
+  setTimeout( () => {
+    console.log(`EL proceso termina con el codigo: ${code}`)
+    process.exit(code)
+  }, 100)
+})
+
+process.on('exit', code => {
+  // solo llamadas sincronas
+  console.log(`El proceso termino con el codigo: ${code}`)
+})
+```
+
+### Signal Events:
+- SIGTERM: cuando se envia el evento SIGTERM se puede terminar el proceso de forma existosa.
+- SIGINT: se emite cuando el proceso fue interrumpido.
+```Javascript
+process.on('SIGTERM',signal => {
+  console.log(`EL proceso ${process.pid} recibio una señal SIGTERM`)
+})
+
+process.on('exit', signal => {
+  console.log(`El proceso ${process.pid} fue interrumpido`)
+  process.exit(0)
+})
+```
+
+### Error Events:
+- uncaughtException: se emite cuando un error de javascript no se maneja de manera adecuada (suelen ser errores de programacion.).
+- unhandleRejection: se emite cuando la promesa es rechazada y no se atrapa dicho error. (pueden ser erores operaciones o de programacion).
+
+En ambos casos de error event deberias terminar el proceso de node.js ya que ya se rompio.
+**NO intentes recuperar la aplicacion despues de un uncaughtException. NO ES SEGURO y tu alicacion puede terminar en mal estado.**
+
+```Javascript
+process.on('uncaughtException',err => {
+  console.log(`Uncaught exception: ${err.message}`)
+  process.exit(1)
+})
+
+process.on('unhandleRejection', (reason, promise) => {
+  console.log(`Unhandle Rejection en la promesa: ${promise} reason: ${reason}`)
+  process.exit(1)
+})
+```
+
+### Process.exit(0) y Process.exit(1)
+Antes de continuar te estaras preguntando que signifca el parametro 0 y 1 que le pasamos al metodo exit del objeto Process.
+- 0: Indica que el proceso se ha ejecutado correctamente y ha finalizado sin errores. Este es el codigo de salida convencional para indicar un final existoso.
+- 1: Indica que el proceso ha finalizado con un error. Cualquier valor distinto de cero generalmente se considera un indicativo de fallo.
+
+
+### Process Monitoring
+Usar procesos nativos del sistema operativo para monitoriar y restaurar el proceso una ves que fallo.
+- systemd: REstart=on-failure
+- upstart: respawn
+si estas usando contenedores podes utilizar:
+- Docker: restart
+- k8s: restartPolicy
+
+Como ultimo recurso pero no recomendable usar procesos de monitoreo de node.js como pm2 y forever. Estas herramientas son buenas para el desarrollo pero no para produccion.
+
+### Apagar el servidor de forma exitosa
+- server.close() : deja de aceptar nuevas conecciones.
+``` Javascript
+process.on('<signal or error event>' _ => {
+  server.close(()=>{
+    process.exit(0)
+  })
+// si el servidor no se cierra en 1000ms, tenemos que apagar el proceso.
+  setTimeout(()=>{
+    process.exit(0)
+  }, 1000).unref()// no registra el timeOut en el bucle de eventos
+})
+```
+
+### Logging
+- Implementar una logica de estrategia robusta para logger los errores de tu aplicacion, especialmente cuando se apaga.
+- Guardar toda la informacion importante del error.
+- Puedes usar librerias como pino o windston.
+
+### Crear una funcion para manejar los procesos y los log
+``` Javascript
+export function terminate (server, options = {coredump: false, timeout: 500}) {
+  const exit = code => {
+    options.coredump ? process.abort() : process.exit(code)
+  }
+
+  return (code, reason) => (err, promise) => {
+    console.log(`se salio del proceso con el codigo: ${code}, reason ${reason}`)
+
+    if(err && err instanceof Error) {
+      // log la informacion del error
+      console.log(err.message, err.stack)
+    }
+
+    // intenta apagar la aplicacion exitosamente
+    server.close(exit)
+    setTimeout(exit, options.timeout).unref()
+  }
+}
+```
+
+``` Javascript
+import http from 'http'
+import {terminate} from './terminate.js'
+
+const server = http.createServer(....)
+
+const exitHandler = terminate(server, {
+  coredump: false,
+  timeout: 500
+})
+
+process.on('uncaughtException', exitHandler(1, 'Unexpected Error'))
+process.on('unhandledRejection', exitHandler(1, 'Unhandled Error'))
+process.on('SIGTERM', exitHandler(1, 'SIGTERM'))
+process.on('SIGINT', exitHandler(1, 'SIGINT'))
+```
+
+# Debugger
+Sabias que nodejs incluye una utilidad de debugging en la linea de comandos? veamosla.
+
+El depurador de Node.js te permite pausar la ejecucion de tu script, inspeccionar el valor de las variables, ejecutar codigo paso a paso y mucho mas. Todo esto se hace a traves de una interfaz de linea de comandos.
+
+Ejemplo practico.
+TEnemos un script llamado myscript.js con el siguiente codigo:
+``` Javascript
+function sumar(a,b) {
+  return a + b
+}
+
+const resultado = sumar(2,3)
+
+console.log(resultado)
+```
+
+Depuramos el script con el siguiente comando:
+``` Bash
+node inspect myscript.js
+```
+Esto inicia la depuracion y pausara la ejecucion del script en la primera linea. veras algo como esto en tu terminal:
+``` Bash
+> Debugger listening on port 5858
+connecting... ok
+break in /path/to/your/file.js:1
+1  function sumar(a, b) {
+2    return a + b;
+3  }
+4  
+5  const resultado = sumar(2, 3);
+6  console.log(resultado);
+debug> 
+```
+
+## Comandos basicos del depurador:
+- cont: Continua la ejecucion hasta el siguiente punto de interrupcion.
+- next: ejecuta la siguiente linea de codigo.
+- step: Entra en la siguiente funcion (si hay alguna).
+- out:: Sale de la funcion actual.
+- repl: Abre un entorno REPL (Read-Eval-Print Loop) donde puedes evaluar expresiones.
+- quit: sale del depurador.
+
+ejemplo de uso:
+``` Bash
+debug> next
+break in /path/to/your/file.js:5
+5  const resultado = sumar(2, 3);
+debug> resultado
+undefined
+debug> sumar(2, 3)
+5
+debug> quit
+
+```
+
+## Ventajas y despentajas del depurador integrado:
+Ventajas:
+- Sensillo de usar: NO requiere instalaciones adicionales.
+- Flexible: Permite un control granular sobre la ejecucion del codigo.
+- Ideal para tareas basicas: Es perfecto para depurar scripts pequeños y medianos.
+
+Limitaciones:
+- Interfaz de linea de comandos: Puede ser menos intuitiva que las interfaces graficas de depuracion de IDEs.
+- Funcionalidad limitada: No ofrece todas las caracteristicas de depuracion mas avanzados.
+
+En resumen el depurador integrado es una herramienta util para depurar tus apps de forma sensilla y rapida pero si necesitas algo mas avanzado explora otras opciones como Node Inspector o los IDEs como visual studio code.
