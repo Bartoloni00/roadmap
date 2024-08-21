@@ -43,6 +43,7 @@ node app.js
 tambien puedes decirle explicitamente a la consola que se corra como un archivo de node con una linea "shebang". Esta linea tiene que ser la primera en todo el archivo y le dice al OS que se interprete como un script.
 ``` JavaScript
 #!/usr/bin/node
+#!/usr/bin/env node
 
 // codigo javascript
 ```
