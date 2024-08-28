@@ -109,3 +109,316 @@ La administración de interfaces de programación de aplicaciones, o administrac
 En su nivel más simple, las interfaces de programación de aplicaciones (API) permiten la comunicación entre aplicaciones de software dispares. Los desarrolladores pueden conectar API de diferentes compañías y servicios para lograr resultados específicos. Los usos populares de las API incluyen habilitar la implementación de bibliotecas y marcos en diferentes idiomas, especificar la interfaz entre una aplicación y un sistema operativo, manipular recursos remotos a través de protocolos y definir la interfaz a través de la cual se producen interacciones entre un tercero y las aplicaciones que usan los recursos. Desde desarrolladores web y desarrolladores móviles independientes hasta grandes compañías y agencias gubernamentales, las API se aprovechan cada vez más en una variedad de industrias y casos de uso.
 
 En la actualidad, los desarrolladores, las compañías y las organizaciones a menudo crean API abiertas que permiten a otros integrarse con sus productos y sus servicios. En todos los sectores existen cientos de miles de API diseñadas para facilitar el intercambio de información. A medida que aumenta la cantidad de API, aumenta la necesidad de que los desarrolladores y las compañías las monitoricen y administren de forma segura y escalable.
+
+# Frameworks / Tecnologias mas utilizadas para construir API con Node.js
+- Express: Express es uno de los frameworks más populares para Node.js, conocido por su simplicidad y flexibilidad. Es minimalista, lo que significa que proporciona solo las características básicas necesarias para construir una API, y permite añadir middleware y otras herramientas según sea necesario.
+    **Ventajas**
+    - Extremadamente popular: Hay una gran comunidad y abundante documentación disponible.
+    - Simplicidad: Fácil de aprender y usar, especialmente para principiantes.
+    - Flexibilidad: Puedes construir una API simple o una aplicación web completa, según las necesidades.
+    - Middleware: Gran ecosistema de middleware que permite ampliar la funcionalidad de la aplicación.
+    **Desventajas**
+    - Performance: No es el mas rapido en comparacion con algunos frameworks mas nuevos.
+    - Sin convencion estricta: La libertad que ofrece puede llevar a que el codigo se vuelva inconsistente si no se siguen buenas practicas
+- Fastify: Fastify es un framework de Node.js diseñado para ser rápido y eficiente. Se enfoca en el rendimiento y la baja sobrecarga, y utiliza un sistema de plugins que facilita la modularidad y la reusabilidad del código.
+    **Ventajas**
+    - Alto rendimiento: Considerablemente más rápido que Express en muchos casos.
+    - Sistema de plugins: Facilita la extensión y la reutilización de componentes de forma modular.
+    - Esquema de validación: Integra validaciones de datos con JSON Schema, lo que mejora la seguridad y la confiabilidad.
+    - Eficiencia: Menor consumo de recursos en comparación con otros frameworks.
+    **Desventajas**
+    - Comunidad más pequeña: Aunque está creciendo, todavía no es tan popular como Express, lo que puede limitar los recursos disponibles.
+    - Curva de aprendizaje: Puede ser más difícil de aprender para los nuevos desarrolladores debido a su enfoque en el rendimiento y la modularidad.
+- NextJS: Next.js es un framework de React que se usa principalmente para construir aplicaciones web y sitios web estáticos, pero también es capaz de construir APIs. Permite la renderización del lado del servidor y del lado del cliente, lo que lo hace muy poderoso para aplicaciones completas.
+    **Ventajas**
+    - SSR y SSG: Ofrece renderización del lado del servidor (SSR) y generación de sitios estáticos (SSG), lo que mejora la performance y el SEO.
+    - File-based routing: El sistema de enrutamiento basado en archivos facilita la organización de las rutas.
+    - Integración con React: Si ya estás familiarizado con React, Next.js es una extensión natural.
+    - Full-stack: Permite desarrollar tanto el frontend como el backend en un solo proyecto.
+    **Desventajas**
+    - Más pesado: No es tan liviano como Express o Fastify, lo que puede ser un problema si solo necesitas una API.
+    - Dependencia de React: No es ideal si no quieres usar React para el frontend.
+    - Complejidad: Más complejo de configurar y mantener si solo necesitas una API simple.
+- Hono: Hono es un framework ultraligero para construir APIs con Node.js. Está diseñado para ser extremadamente rápido y pequeño, con un enfoque en la simplicidad y el rendimiento. Es compatible con la especificación Web API, lo que lo hace similar a trabajar con el entorno fetch.
+    **Ventajas**
+    - Extremadamente ligero: Ideal para microservicios y aplicaciones donde el rendimiento es crítico.
+    - Compatible con Web API: Si estás familiarizado con fetch y otros estándares web, Hono será fácil de adoptar.
+    - Alto rendimiento: Comparable o incluso superior a Fastify en términos de velocidad.
+    **Desventajas**
+    - Comunidad pequeña: Aún es un framework emergente con una comunidad limitada.
+    - Menos documentación: Puede ser difícil encontrar ejemplos o soluciones a problemas comunes debido a su juventud.
+
+## Comparacion:
+### Rendimiento:
+Fastify y Hono son los frameworks mas rapidos. Hono, siendo ultraligero, puede tener la ventaja en escenarios donde cada milisegundo cuenta. Express, aunque mas lento, sigue siendo suficientemente rapido para muchas aplicaciones comunes. Next.js, debido a su naturaleza full-stack, puede ser mas pesado y menos eficiente para APIs puras.
+### Facilidad de uso
+Express y Next.js destacan por su facilidad de uso, especialmente Express, que es extremandamente sencillo para API simples.
+Next.js es mas facil si ya estas trabajando con React. Fastify, aunque mas rapido, tiene una curva de aprendizaje mas pronunciada. Hono, debido a su simplicidad, es facil de adoptar si estas familiarizado con la Web API, pero la documentacion limitada puede ser un obstaculo.
+### Flexibilidad y Econsistema
+Express tiene el ecosistema mas amplio, con una enorme cantidad de middleware disponible. Fastify le sigue con su sistema de plugins, que es muy potente. Next.js es el mas adecuado para aplicaciones full-stack que requieren tanto frontend como backend en react. Hono es ideal para microservicios o APIs donde la simplicidad y el rendimiento son criticos, pero su ecosistema es mas limitado.
+### Modularidad y Escalabilidad
+Fastify se destacada con sus sistema de plugins, que facilita la creacion de aplicaciones modulares y escalables. Express, aunque flexible, require mas esfuerzo para mantener una estructura modular en aplicaciones grandes. Next.js es excelente para proyectos Full-stack, pero puede ser excesivo si solo se necesita una API. Hono, al ser ultraligero, es mas adecuado para microservicios que para aplicaciones muy grandes.
+
+# LLamar a una API
+A continuacion se muestran todas las maneras de llamar a un API desde Node.js no es necesario que conozcas todas pero puede ser util para saber cual es la que mas te conviene en cada situacion.
+## HTTP MODULE
+El modulo 'http' es parte del nucleo de node.js y se utiliza para realizar operaciones HTTP sin la necesidad de instalar paquetes adicionales. Es mas bajo nivel en comparacion con otras opciones y require mas configuracion.
+``` Javascript
+const http = require('http')
+
+// configuramos las opciones de la solicitud
+const options = {
+    hostname: 'api.xambple.com',
+    port: 80,
+    path: '/data',
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+}
+
+//Hacer la solicitud
+const req = http.request(options, res => {
+    let data = ''
+    // recibimos los datos
+    res.on('data', chunk => {
+        data += chunk
+    })
+
+    //terminar la solicitud
+    res.on('end',()=>{
+        console.log(JSON.parce(data))
+    })
+})
+
+// manejar errores
+req.on('error', error => {
+    console.error(`Error: ${error.message}`)
+})
+
+// finalizar la solicitud
+req.end()
+```
+
+**Ventajas**
+- No requiere instalacion de paquetes adicionales.
+- Alta flexibilidad y control sobre la solicitud.
+
+**Desventajas**
+- Es mas complejo y verboso que otras opciones.
+- Carece de caracteristicas como promesas o manejo de errores simplificado.
+
+## Fetch
+fetch es una API nativa de JavaScript disponible en navegadores y, gracias a bibliotecas como node-fetch, también se puede usar en Node.js. Es simple y moderna, usando promesas para manejar solicitudes HTTP.
+``` Javascript
+const fetch = require('node-fetch');
+
+fetch('https://api.example.com/data')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+**Ventajas**
+- API moderna basada en promesas.
+- Facil de usar y entender.
+- Compatibilidad con navegadores y Node.js
+
+**Desventajas**
+- Necesitas una biblioteca adicional como 'node-fetch' en Node.js
+- Carece de algunas funcionalidades avanzadas que ofrecen otros paquetes.
+
+## axios
+es una biblioteca popular para realizar solicitudes HTTP. Soporta promesas y ofrece una API fácil de usar, con características avanzadas como interceptores y cancelación de solicitudes.
+
+``` Javascript
+const axios = require('axios');
+
+axios.get('https://api.example.com/data')
+  .then(response => console.log(response.data))
+  .catch(error => console.error('Error:', error));
+```
+
+**Ventajas**
+- Soporte para promesas
+- Manejo avanzado de solicitudes, como interceptores.
+- API intuitiva y sencilla.
+
+**Desventajas**
+- Necesita ser instalado como una dependencia adicional.
+- Mas pesado que otras opciones como 'fetch'
+## KY
+Es una biblioteca ligera para realizar solicitudes HTTP basada en fetch. Ofrece una API moderna y simplificada, incluyendo soporte para interceptores y manejo de errores mejorado.
+``` Javascript
+const ky = require('ky').default;
+
+ky.get('https://api.example.com/data')
+  .json()
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+**Ventajas**
+- Ligero y facil de usar
+- Basado en fetch, pero con funcionalidades adicionales.
+- Ideal para proyectos pequeños o medianos.
+
+**Desventajas**
+- Menos popular que axios, lo que significa menos ejemplos y recursos.
+- Menos caracteristicas avanzadas en comparacion con axios.
+
+## Got package
+es una biblioteca popular para realizar solicitudes HTTP en Node.js. Es rápida, con una API rica en funciones como manejo de streams, soporte para promesas, y opciones avanzadas de personalización.
+``` Javascript
+const got = require('got');
+
+got('https://api.example.com/data')
+  .json()
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+**Ventajas**
+- Soporta promesas y streams.
+- API rica en caracteristicas, similar a axios
+- Manejo avanzado de errores y opciones de personalizacion.
+
+**Desventajas**
+- Puede ser mas conplejo de configurar para usos basicos.
+- Necesita instalacion como una dependencia adicional.
+
+## Comparacion
+- Simplicidad: fetch y KY son las opciones más simples y modernas, ideales para solicitudes rápidas y sencillas. axios y got son más avanzados y completos, pero también más pesados. El módulo http es más complejo y menos intuitivo.
+
+- Popularidad: axios es el más popular, seguido por fetch. got es conocido en la comunidad de Node.js, mientras que KY es menos común pero apreciado por su ligereza.
+
+- Características: axios y got ofrecen más características avanzadas como interceptores, cancelación de solicitudes y manejo avanzado de errores. fetch y KY son más ligeros y directos, pero carecen de algunas de estas funcionalidades. El módulo http ofrece el control más granular, pero a costa de la simplicidad.
+
+# Authentication
+## JWT: JSON Web Token
+Es un estandar abierto (RFC 7519) que define una forma compacta y autonoma para transmitir informacion de manera segura entre dos partes como un objeto JSON.
+Esta informacion puede ser verificada y confiada porque esta firmada digitalmente. Enla mayoria de los casos, seutiliza para autenticar a usuarios en aplicaciones web.
+### ¿Como funciona JWT?
+1. Creacion del token:
+    Cuando un usuario inicia sesion en una aplicacion, el servidor genera un JWT y lo envia al cliente (generalmente un navegador web)
+    Este Token contiene tres partes:
+    1. Header (Encabezado): Describe el tipo de token y el algoritmo de firma.
+    2. Payload (Cuerpo): Contiene los reclamos o datos que se transmiten, como el ID del usuario y otros detalles.
+    3. Signature (Firma): Se crea combinando el encabezado codigicado, el cuerpo codificado y una clave secreta utilizando el algoritmo especificado en el encabezado.
+2. Uso del Token:
+El cliente almacena el JWT (a menudo en el almacenamiento local o en una cookie) y lo envia en el encabezado de autorizacion de cada solicitud posterior al servidor.
+EL servidor verifica la firma del token utilizando la clave secreta. Si la firma es valida, el servidor confia en los datos del token y permite el acceso a los recursos solicitados.
+3. Verificacion y expiracion:
+El servidor puede validar el JWT sin necesidad de consultar una base de datos, lo que hace que sea una solucion escalable.
+Los JWT generalmente incluyen un tiempo de expiracion ('exp') despues del cual no son validos, lo que aumenta la seguridad.
+
+Ejemplo de uso:
+1. Instalar dependencias
+``` Bash
+npm install express jsonwebtoken
+```
+2. Crear un servidor express con JWT
+``` Javascript
+const express = require('express');
+const jwt = require('jsonwebtoken');
+
+const app = express();
+const PORT = 3000;
+
+// Clave secreta para firmar el JWT
+const SECRET_KEY = 'mySecretKey';
+
+// Middleware para leer el cuerpo de las solicitudes
+app.use(express.json());
+
+// Ruta para iniciar sesión y generar un JWT
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+
+  // Validar las credenciales del usuario (esto es un ejemplo simple)
+  if (username === 'user' && password === 'password') {
+    // Crear un payload con los datos del usuario
+    const payload = {
+      username,
+      role: 'admin'
+    };
+
+    // Generar el JWT
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+
+    // Enviar el token al cliente
+    res.json({ token });
+  } else {
+    res.status(401).json({ error: 'Credenciales incorrectas' });
+  }
+});
+
+// Middleware para proteger rutas y verificar el JWT
+const authenticateToken = (req, res, next) => {
+  const token = req.headers['authorization'];
+
+  if (!token) {
+    return res.status(403).json({ error: 'Token requerido' });
+  }
+
+  // Verificar el JWT
+  jwt.verify(token, SECRET_KEY, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: 'Token inválido' });
+    }
+
+    // Si el token es válido, agregar la información del usuario a la solicitud
+    req.user = user;
+    next();
+  });
+};
+
+// Ruta protegida, accesible solo con un JWT válido
+app.get('/protected', authenticateToken, (req, res) => {
+  res.json({ message: 'Acceso permitido', user: req.user });
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+});
+```
+
+3. Probar la aplicacion
+    1. Iniciar sesion:
+    Enviar una solicitud POST a la url de login (http://localhost:300/login) con el siguiente cuerpo:
+    ``` JSON
+    {
+    "username": "user",
+    "password": "password"
+    }
+    ```
+    > si las credenciales son correctas recibis un JWT en la respuesta.
+    2. Acceder a una ruta protegida:
+    Enviar la solicitud a la ruta protegida (http://localhost:3000/protected) incluyendo el JWT en el encabezado de autorizacion:
+    ``` http
+    Authorization: Bearer <tu-jwt-aquí>
+    ```
+    > Si el token es valido, ingresaras a la ruta protegida.
+## passport.js
+Passport.js es un middleware de autenticación para Node.js que proporciona una manera sencilla y flexible de implementar autenticación en aplicaciones web. Es extremadamente modular y soporta una gran variedad de estrategias de autenticación, como autenticación local (usuario/contraseña), OAuth (por ejemplo, con Google, Facebook, Twitter), JWT, y muchas más.
+### ¿Como funciona Passport.js?
+1. Estrategias de Autenticación:
+
+    Passport.js funciona con estrategias que definen cómo se autentican los usuarios. Una estrategia puede ser cualquier método de autenticación, como la verificación de un nombre de usuario y contraseña, o la autenticación a través de un servicio externo como Google o GitHub.
+    Cada estrategia se configura de forma independiente, lo que permite añadir y combinar múltiples métodos de autenticación en una misma aplicación.
+
+2. Serialización y Deserialización:
+
+    Passport.js utiliza dos métodos clave: serializeUser y deserializeUser. Estos métodos determinan cómo los datos del usuario se guardan en la sesión y cómo se recuperan para ser utilizados en cada solicitud.
+    Por ejemplo, el serializeUser podría almacenar el ID del usuario en la sesión, mientras que deserializeUser usa ese ID para cargar el usuario completo desde la base de datos.
+
+3. Middleware:
+    Passport.js se integra con Express como middleware, lo que permite proteger rutas, gestionar sesiones y controlar el flujo de autenticación con facilidad.
+
+### Ventajas de passport.js
+- Modularidad: Soporta una gran variedad de estrategias de autenticación, lo que permite integrar múltiples métodos en una sola aplicación.
+- Integración con Express: Se integra de manera fluida con Express, facilitando la protección de rutas y la gestión de sesiones.
+- Facilidad de uso: Una vez configurado, es muy sencillo proteger rutas y manejar la autenticación.
+### Desventajas de passport.js
+- Curva de aprendizaje: Puede ser un poco complicado al principio, especialmente cuando se trabaja con estrategias más complejas.
+- Manejo de sesiones: Aunque es poderoso, puede requerir una configuración adicional para manejar sesiones y cookies de manera efectiva.
