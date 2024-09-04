@@ -232,5 +232,5 @@ Se refiere a la tecnica de grabar las respuestas de las llamadas a APIs externas
 3. Accessibility testing
 4. A/B testing
 
-# Jest
-...proximamente
+## Recomendacion
+> Framework de testing recomendado para aprender: Jest en combinacion con la libreria de testing para node.js: supertest

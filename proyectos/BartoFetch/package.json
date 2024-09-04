@@ -1,0 +1,25 @@
+{
+  "name": "bartofetch",
+  "version": "1.0.0",
+  "description": "Mi propia version de Neofetch realizada con Node.js",
+  "type": "module",
+  "main": "bin/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "neofetch",
+    "OS",
+    "Node.js",
+    "Bash",
+    "CLI"
+  ],
+  "author": "Abraham Bartoloni",
+  "license": "ISC",
+  "bin": {
+    "bartofetch": "./bin/index.js"
+  },
+  "dependencies": {
+    "systeminformation": "^5.23.5"
+  }
+}
