@@ -22,7 +22,7 @@ async function fetchSystemInfo() {
     // Deja espacios para las líneas que se actualizarán
     process.stdout.write('Uptime: \n');
     process.stdout.write('Memory: \n');
-    // Usa setInterval para actualizar solo la información variable
+    // Usa se tInterval para actualizar solo la información variable
    // Guarda las posiciones iniciales de las líneas que se van a actualizar
    const updateUptimeLine = 12;  // Suponiendo que 'Uptime' está en la línea 9
    const updateMemoryLine = 13; // Suponiendo que 'Memory' está en la línea 10
